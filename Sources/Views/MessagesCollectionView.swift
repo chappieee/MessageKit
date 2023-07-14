@@ -27,6 +27,8 @@ import UIKit
 
 open class MessagesCollectionView: UICollectionView {
 
+    open var didTapBackground: ((_ gesture: UIGestureRecognizer) -> Void)?
+    
     // MARK: - Properties
 
     open weak var messagesDataSource: MessagesDataSource?
@@ -107,7 +109,11 @@ open class MessagesCollectionView: UICollectionView {
         guard gesture.state == .ended else { return }
         
         let touchLocation = gesture.location(in: self)
-        guard let indexPath = indexPathForItem(at: touchLocation) else { return }
+//        guard let indexPath = indexPathForItem(at: touchLocation) else { return }
+        guard let indexPath = indexPathForItem(at: touchLocation) else {
+            didTapBackground?(gesture)
+            return
+        }
         
         let cell = cellForItem(at: indexPath) as? MessageCollectionViewCell
         cell?.handleTapGesture(gesture)
